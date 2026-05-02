@@ -1,0 +1,135 @@
+@startuml Smart_Energy_Manager
+
+skinparam classAttributeIconSize 0
+skinparam classFontSize 13
+skinparam classHeaderBackgroundColor #dae8fc
+skinparam classBorderColor #6c8ebf
+skinparam ArrowColor #333333
+skinparam linetype ortho
+
+' ══════════════════════
+' MODEL
+' ══════════════════════
+
+abstract class Batiment {
+  - id : String
+  - nom : String
+  - adresse : String
+  - surface : int
+  - x : int
+  - y : int
+  - releves : List<Releve>
+  --
+  + getId() : String
+  + getNom() : String
+  + getReleves() : List<Releve>
+  + ajouterReleve(r : Releve) : void
+  + {abstract} genererReleves(date : LocalDate) : List<Releve>
+}
+
+class Maison {
+  + genererReleves(date : LocalDate) : List<Releve>
+}
+
+class Appartement {
+  + genererReleves(date : LocalDate) : List<Releve>
+}
+
+class Bureau {
+  + genererReleves(date : LocalDate) : List<Releve>
+}
+
+class LocalCommercial {
+  + genererReleves(date : LocalDate) : List<Releve>
+}
+
+class BatimentUniversitaire {
+  + genererReleves(date : LocalDate) : List<Releve>
+}
+
+class Releve {
+  - date : LocalDate
+  - typeEnergie : TypeEnergie
+  - quantite : double
+  - cout : double
+  --
+  + getDate() : LocalDate
+  + getTypeEnergie() : TypeEnergie
+  + getQuantite() : double
+  + getCout() : double
+}
+
+enum TypeEnergie {
+  ELECTRICITE
+  EAU
+  GAZ
+  CHAUFFAGE
+  CLIMATISATION
+  --
+  - unite : String
+  + getUnite() : String
+}
+
+' ══════════════════════
+' SERVICES
+' ══════════════════════
+
+class BatimentService {
+  - batiments : List<Batiment>
+  --
+  + ajouterBatiment(b : Batiment) : void
+  + supprimerBatiment(id : String) : void
+  + modifierBatiment(b : Batiment) : void
+  + getTousBatiments() : List<Batiment>
+  + sauvegarder() : void
+  + charger() : void
+}
+
+class StatistiquesService {
+  - batimentService : BatimentService
+  --
+  + consommationTotaleJour(date : LocalDate) : double
+  + consommationTotaleMois(mois : int, annee : int) : double
+  + coutTotalMois(mois : int, annee : int) : double
+  + batimentPlusConsommateur() : Batiment
+  + energieDominante() : TypeEnergie
+  + detecterAnomalie(b : Batiment) : boolean
+}
+
+class Simulation {
+  - dateSimulation : LocalDate
+  - batimentService : BatimentService
+  --
+  + getDateSimulation() : LocalDate
+  + avancerJour() : void
+  + genererMois() : void
+}
+
+class JsonPersistanceService {
+  - cheminFichier : String
+  --
+  + sauvegarder(batiments : List<Batiment>) : void
+  + charger() : List<Batiment>
+}
+
+' ══════════════════════
+' RELATIONS
+' ══════════════════════
+
+Batiment <|-- Maison
+Batiment <|-- Appartement
+Batiment <|-- Bureau
+Batiment <|-- LocalCommercial
+Batiment <|-- BatimentUniversitaire
+
+Batiment "1" *-- "0..*" Releve : contient
+
+Releve --> TypeEnergie : utilise
+
+BatimentService "1" o-- "0..*" Batiment : gère
+BatimentService ..> JsonPersistanceService : utilise
+
+StatistiquesService ..> BatimentService : dépend de
+Simulation ..> BatimentService : dépend de
+
+@enduml
