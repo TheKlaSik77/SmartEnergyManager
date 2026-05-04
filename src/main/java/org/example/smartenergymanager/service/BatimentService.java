@@ -1,7 +1,6 @@
 package org.example.smartenergymanager.service;
 
 import org.example.smartenergymanager.model.batiment.Batiment;
-import org.example.smartenergymanager.model.utils.JsonPersistanceService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

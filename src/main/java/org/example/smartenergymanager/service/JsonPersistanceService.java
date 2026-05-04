@@ -1,7 +1,6 @@
-package org.example.smartenergymanager.model.utils;
+package org.example.smartenergymanager.service;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 import org.example.smartenergymanager.model.batiment.*;
@@ -10,6 +9,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +28,13 @@ public class JsonPersistanceService {
 
     public JsonPersistanceService() {
         this.cheminFichier = "src/main/resources/org/example/smartenergymanager/data/batiments.json";
-        this.gson = new GsonBuilder().registerTypeAdapterFactory(adapter).create();
+        this.gson = new GsonBuilder()
+                .registerTypeAdapterFactory(adapter)
+                .registerTypeAdapter(LocalDate.class, (JsonSerializer<LocalDate>)
+                        (src, typeOfSrc, context) -> new JsonPrimitive(src.toString()))
+                .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>)
+                        (json, typeOfT, context) -> LocalDate.parse(json.getAsString()))
+                .create();
     }
 
     public void sauvegarder(List<Batiment> listeBatiments) {
