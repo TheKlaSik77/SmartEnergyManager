@@ -11,40 +11,51 @@ skinparam linetype ortho
 ' MODEL
 ' ══════════════════════
 
-abstract class Batiment {
-  - id : String
-  - nom : String
-  - adresse : String
-  - surface : int
+class Coordonnees {
   - x : int
   - y : int
-  - releves : List<Releve>
   --
-  + getId() : String
-  + getNom() : String
-  + getReleves() : List<Releve>
-  + ajouterReleve(r : Releve) : void
-  + {abstract} genererReleves(date : LocalDate) : List<Releve>
+  + getX() : int
+  + getY() : int
 }
 
+abstract class Batiment {
+  - id : int
+  - nom : String
+  - surface : int
+  - coordonnees : Coordonnees
+  - releves : List<Releve>
+  --
+  + getId() : int
+  + getNom() : String
+  + getSurface() : int
+  + getCoordonnees() : Coordonnees
+  + getListeReleves() : List<Releve>
+  + ajouterReleve(r : Releve) : void
+  # calculerReleve(date : LocalDate, type : TypeEnergie, coefMin : double, coefMax : double) : Releve
+  + genererReleves(date : LocalDate) : void
+  # {abstract} genererElectricite(date : LocalDate) : Releve
+  # {abstract} genererEau(date : LocalDate) : Releve
+  # {abstract} genererGaz(date : LocalDate) : Releve
+  # {abstract} genererChauffage(date : LocalDate) : Releve
+  # {abstract} genererClimatisation(date : LocalDate) : Releve
+}
+
+Batiment *-- Coordonnees : possède
+
 class Maison {
-  + genererReleves(date : LocalDate) : List<Releve>
 }
 
 class Appartement {
-  + genererReleves(date : LocalDate) : List<Releve>
 }
 
 class Bureau {
-  + genererReleves(date : LocalDate) : List<Releve>
 }
 
 class LocalCommercial {
-  + genererReleves(date : LocalDate) : List<Releve>
 }
 
 class BatimentUniversitaire {
-  + genererReleves(date : LocalDate) : List<Releve>
 }
 
 class Releve {
@@ -67,7 +78,10 @@ enum TypeEnergie {
   CLIMATISATION
   --
   - unite : String
+  - prixUnitaire : double
   + getUnite() : String
+  + getPrixUnitaire() : double
+
 }
 
 ' ══════════════════════
@@ -78,11 +92,12 @@ class BatimentService {
   - batiments : List<Batiment>
   --
   + ajouterBatiment(b : Batiment) : void
-  + supprimerBatiment(id : String) : void
+  + supprimerBatiment(b : Batiment) : void
   + modifierBatiment(b : Batiment) : void
   + getTousBatiments() : List<Batiment>
+  + genererReleveUnJour(date : LocalDate) : void
   + sauvegarder() : void
-  + charger() : void
+  + charger() : List<Batiment>
 }
 
 class StatistiquesService {
@@ -102,7 +117,7 @@ class Simulation {
   --
   + getDateSimulation() : LocalDate
   + avancerJour() : void
-  + genererMois() : void
+  + avancerUnMois() : void
 }
 
 class JsonPersistanceService {
@@ -111,6 +126,22 @@ class JsonPersistanceService {
   + sauvegarder(batiments : List<Batiment>) : void
   + charger() : List<Batiment>
 }
+
+class CalendrierService {
+  --
+  + {static} estWeekend(date : LocalDate) : boolean
+  + {static} estVacancesScolaires(date : LocalDate) : boolean
+  + {static} getSaison(date : LocalDate) : Saison
+}
+
+enum Saison {
+  HIVER
+  PRINTEMPS
+  ETE
+  AUTOMNE
+}
+
+
 
 ' ══════════════════════
 ' RELATIONS
@@ -131,5 +162,9 @@ BatimentService ..> JsonPersistanceService : utilise
 
 StatistiquesService ..> BatimentService : dépend de
 Simulation ..> BatimentService : dépend de
+
+CalendrierService ..> Saison : utilise
+Batiment ..> CalendrierService : utilise
+
 
 @enduml
