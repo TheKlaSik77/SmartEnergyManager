@@ -10,8 +10,13 @@ import java.time.LocalDate;
 
 public class BatimentUniversitaire extends Batiment {
 
-    public BatimentUniversitaire(int id, String nom, int surface, Coordonnees coordonnees) {
-        super(id, nom, surface, coordonnees);
+    public BatimentUniversitaire(String nom, int surface, Coordonnees coordonnees) {
+        super(nom, surface, coordonnees);
+    }
+
+    @Override
+    public TypeBatiment getTypeBatiment() {
+        return TypeBatiment.BATIMENT_UNIVERSITAIRE;
     }
 
     @Override

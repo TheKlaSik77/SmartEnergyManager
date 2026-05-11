@@ -4,18 +4,22 @@ import org.example.smartenergymanager.model.batiment.*;
 import org.example.smartenergymanager.model.utils.Coordonnees;
 import org.example.smartenergymanager.model.utils.TypeEnergie;
 import org.example.smartenergymanager.service.BatimentService;
+import org.example.smartenergymanager.service.JsonPersistanceService;
 import org.example.smartenergymanager.service.SimulationService;
+
+import java.io.File;
 
 public class Main {
 
     static void main() {
-        BatimentService service = new BatimentService();
 
-        Maison m = new Maison(1, "Maison Montmartre", 90, new Coordonnees(100, 150));
-        Appartement a = new Appartement(2, "Appart Marais", 45, new Coordonnees(200, 300));
-        Bureau b = new Bureau(3, "Bureau La Défense", 200, new Coordonnees(50, 400));
-        LocalCommercial lc = new LocalCommercial(4, "Boutique Rivoli", 120, new Coordonnees(350, 250));
-        BatimentUniversitaire u = new BatimentUniversitaire(5, "Fac Jussieu", 5000, new Coordonnees(400, 500));
+        BatimentService service = BatimentService.getInstance();
+
+        Maison m = new Maison("Maison1" , 90, new Coordonnees(100, 150));
+        Appartement a = new Appartement( "Appartement1" , 45, new Coordonnees(200, 300));
+        Bureau b = new Bureau("Bureau1" , 200, new Coordonnees(50, 400));
+        LocalCommercial lc = new LocalCommercial("Local1" , 120, new Coordonnees(350, 250));
+        BatimentUniversitaire u = new BatimentUniversitaire( "Université1" , 5000, new Coordonnees(400, 500));
 
         service.ajouterBatiment(m);
         service.ajouterBatiment(a);
@@ -23,7 +27,7 @@ public class Main {
         service.ajouterBatiment(lc);
         service.ajouterBatiment(u);
 
-        SimulationService sim = new SimulationService(service);
+        SimulationService sim = SimulationService.getInstance();
 
         // On simule en hiver (janvier 2026) et en été (juillet 2026)
         sim.avancerUnJour(); // 1er janvier — hiver
@@ -34,7 +38,7 @@ public class Main {
             sim.avancerUnJour();
         }
 
-        service.sauvegarder();
+        JsonPersistanceService.getInstance().sauvegarder("batiments");
         System.out.println("Sauvegarde terminée !");
     }
 

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.smartenergymanager.controller.SauvegarderFichierFormulaireController"
+      spacing="15"
+      style="-fx-padding: 20;"
+      prefWidth="350">
+    <VBox alignment="CENTER" style="-fx-spacing: 15;">
+        <Label text="Sauvegarde sur fichier existant :"/>
+        <ComboBox fx:id="listeFichiers" editable="true">
+            <items>
+            </items>
+        </ComboBox>
+    </VBox>
+
+    <Separator/>
+    <HBox alignment="CENTER" style="-fx-spacing: 15;">
+        <Button text="Annuler" onAction="#onAnnuler"/>
+        <Button text="Sauvegarder" onAction="#onSauvegardeSurFichier"/>
+    </HBox>
+    <Separator/>
+
+
+</VBox>

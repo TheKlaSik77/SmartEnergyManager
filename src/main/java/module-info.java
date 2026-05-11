@@ -22,4 +22,7 @@ module org.example.smartenergymanager {
     opens org.example.smartenergymanager.model.batiment to com.google.gson;
     exports org.example.smartenergymanager.service;
     opens org.example.smartenergymanager.service to com.google.gson, javafx.fxml;
+
+    exports org.example.smartenergymanager.controller;
+    opens org.example.smartenergymanager.controller to javafx.fxml;
 }

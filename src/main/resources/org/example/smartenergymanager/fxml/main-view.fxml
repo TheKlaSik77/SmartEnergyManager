@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.smartenergymanager.controller.MainController"
+            prefWidth="1200" prefHeight="800">
+
+    <!-- Bandeau avec date et boutons passer jour -->
+    <top>
+        <HBox spacing="20" alignment="CENTER" style="-fx-padding: 10; -fx-background-color: #2c2c2c;">
+            <Label text="Date de simulation :" style="-fx-text-fill: white;"/>
+            <Label fx:id="labelDate" text="01/01/2026" style="-fx-text-fill: white;"/>
+            <Button fx:id="btnJourSuivant" text="Jour suivant" onAction="#onJourSuivant"/>
+            <Button fx:id="btnGenererMois" text="Générer mois" onAction="#onGenererMois"/>
+            <fx:include source="charger-fichier.fxml"/>
+            <Button fx:id="Sauvegarder" text="Sauvegarder" onAction="#ouvrirSauvegardeFormulaire"/>
+        </HBox>
+
+
+    </top>
+
+    <!-- ONGLETS -->
+    <center>
+        <TabPane tabClosingPolicy="UNAVAILABLE">
+            <Tab text="Carte">
+                <fx:include source="carte/carte-view.fxml" fx:id="carte"/>
+            </Tab>
+            <Tab text="Liste">
+                <fx:include source="liste-view.fxml" fx:id="liste"/>
+            </Tab>
+            <Tab text="Dashboard">
+                <fx:include source="dashboard-view.fxml" fx:id="dashboard"/>
+            </Tab>
+            <Tab text="..."/>
+        </TabPane>
+    </center>
+
+</BorderPane>

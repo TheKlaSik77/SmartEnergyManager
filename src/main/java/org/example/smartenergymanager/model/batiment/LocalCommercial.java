@@ -10,8 +10,13 @@ import java.time.LocalDate;
 
 public class LocalCommercial extends Batiment {
 
-    public LocalCommercial(int id, String nom, int surface, Coordonnees coordonnees) {
-        super(id, nom, surface, coordonnees);
+    public LocalCommercial(String nom, int surface, Coordonnees coordonnees) {
+        super(nom, surface, coordonnees);
+    }
+
+    @Override
+    public TypeBatiment getTypeBatiment() {
+        return TypeBatiment.LOCAL_COMMERCIAL;
     }
 
     @Override

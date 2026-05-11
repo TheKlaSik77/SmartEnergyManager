@@ -100,7 +100,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>org.example.smartenergymanager/org.example.smartenergymanager.HelloApplication
+                            <mainClass>org.example.smartenergymanager/org.example.smartenergymanager.SmartEnergyManagerApplication
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

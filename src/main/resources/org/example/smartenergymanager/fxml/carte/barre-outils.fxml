@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+
+<VBox prefWidth="140" minWidth="120" maxWidth="140" style="-fx-background-color: rgb(245, 242, 238)" alignment="CENTER"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.smartenergymanager.controller.BarreOutilsController">
+    <Label text="Outils" prefHeight="50" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+    <Separator/>
+    <VBox VBox.vgrow="ALWAYS" alignment="CENTER" spacing="8" style="-fx-font-size: 12px;">
+        <ToggleButton fx:id="maisonBtn"
+                      prefWidth="80" prefHeight="80"
+                      contentDisplay="TOP"
+        >
+            <graphic>
+                <ImageView fx:id="maisonIcone" fitWidth="24" fitHeight="24"/>
+            </graphic>
+        </ToggleButton>
+
+        <ToggleButton fx:id="appartementBtn"
+                      prefWidth="80" prefHeight="80"
+                      contentDisplay="TOP"
+        >
+            <graphic>
+                <ImageView fx:id="appartementIcone" fitWidth="24" fitHeight="24"/>
+            </graphic>
+        </ToggleButton>
+
+        <ToggleButton fx:id="bureauBtn"
+                      prefWidth="80" prefHeight="80"
+                      contentDisplay="TOP"
+        >
+            <graphic>
+                <ImageView fx:id="bureauIcone" fitWidth="24" fitHeight="24"/>
+            </graphic>
+        </ToggleButton>
+
+        <ToggleButton fx:id="batimentUniversitaireBtn"
+                      prefWidth="80" prefHeight="80"
+                      contentDisplay="TOP"
+        >
+            <graphic>
+                <ImageView fx:id="batimentUniversitaireIcone" fitWidth="24" fitHeight="24"/>
+            </graphic>
+        </ToggleButton>
+
+        <ToggleButton fx:id="localCommercialBtn"
+                      prefWidth="80" prefHeight="80"
+                      contentDisplay="TOP"
+        >
+            <graphic>
+                <ImageView fx:id="localCommercialIcone" fitWidth="24" fitHeight="24"/>
+            </graphic>
+        </ToggleButton>
+    </VBox>
+
+    <Region VBox.vgrow="ALWAYS"/>
+    <Separator/>
+    <VBox  prefHeight="150" alignment="CENTER">
+        <ToggleButton fx:id="gommeBtn"
+                      prefWidth="80" prefHeight="80"
+                      contentDisplay="TOP"
+        >
+            <graphic>
+                <ImageView fx:id="gommeIcone" fitWidth="24" fitHeight="24"/>
+            </graphic>
+        </ToggleButton>
+    </VBox>
+</VBox>

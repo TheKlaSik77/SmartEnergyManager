@@ -5,6 +5,7 @@ import org.example.smartenergymanager.model.utils.TypeEnergie;
 import org.example.smartenergymanager.model.utils.Coordonnees;
 
 
+import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +16,15 @@ public abstract class Batiment {
     private int surface;
     private Coordonnees coordonnees;
     private List<Releve> listeReleves;
+    private static int nbBatiments = 0;
 
-    public Batiment(int id, String nom, int surface, Coordonnees coordonnees) {
-        this.id = id;
-        this.nom = nom;
+    public Batiment(String nom, int surface, Coordonnees coordonnees) {
+        this.id = nbBatiments;
+        this.nom = nom;         // TODO : Modifier ça plus tard quand on implémente le formulaire d'ajout d'un nouveau batiment
         this.surface = surface;
         this.coordonnees = coordonnees;
         this.listeReleves = new ArrayList<>();
+        nbBatiments += 1;
     }
 
     public int getId() {
@@ -39,6 +42,8 @@ public abstract class Batiment {
     public Coordonnees getCoordonnees() {
         return coordonnees;
     }
+
+    public abstract TypeBatiment getTypeBatiment();
 
     public List<Releve> getListeReleves() {
         return this.listeReleves;

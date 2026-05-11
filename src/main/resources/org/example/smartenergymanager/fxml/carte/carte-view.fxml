@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.smartenergymanager.controller.CarteController">
+
+    <fx:include source="barre-outils.fxml" fx:id="barreOutils"/>
+    <Pane fx:id="cartePane" HBox.hgrow="ALWAYS" style="-fx-background-color: blue" onMouseClicked="#poserBatiment">
+        <ImageView fx:id="carteImage"
+                   fitWidth="${cartePane.width}"
+                   fitHeight="${cartePane.height}"
+                   pickOnBounds="true">
+        </ImageView>
+    </Pane>
+
+</HBox>

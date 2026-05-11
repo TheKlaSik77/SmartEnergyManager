@@ -10,8 +10,13 @@ import java.time.LocalDate;
 
 public class Appartement extends Batiment {
 
-    public Appartement(int id, String nom, int surface, Coordonnees coordonnees) {
-        super(id, nom, surface, coordonnees);
+    public Appartement(String nom, int surface, Coordonnees coordonnees) {
+        super(nom, surface, coordonnees);
+    }
+
+    @Override
+    public TypeBatiment getTypeBatiment() {
+        return TypeBatiment.APPARTEMENT;
     }
 
     @Override

@@ -9,8 +9,13 @@ import java.time.LocalDate;
 
 public class Bureau extends Batiment {
 
-    public Bureau(int id, String nom, int surface, Coordonnees coordonnees) {
-        super(id, nom, surface, coordonnees);
+    public Bureau(String nom, int surface, Coordonnees coordonnees) {
+        super(nom, surface, coordonnees);
+    }
+
+    @Override
+    public TypeBatiment getTypeBatiment() {
+        return TypeBatiment.BUREAU;
     }
 
     @Override
