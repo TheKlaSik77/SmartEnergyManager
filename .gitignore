@@ -34,3 +34,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Data ###
+./src/main/resources/org/example/smartenergymanager/data

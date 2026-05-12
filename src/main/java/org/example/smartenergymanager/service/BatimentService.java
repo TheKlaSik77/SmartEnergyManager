@@ -11,13 +11,11 @@ import java.util.List;
 
 public class BatimentService {
     private ObservableList<Batiment> listeBatiments;
-    private JsonPersistanceService jsonPersistanceService;
 
     private static BatimentService instance = null;
 
-    public BatimentService(){
+    private BatimentService(){
         this.listeBatiments = FXCollections.observableArrayList();
-        this.jsonPersistanceService = JsonPersistanceService.getInstance();
     }
 
     public static BatimentService getInstance(){
@@ -70,7 +68,7 @@ public class BatimentService {
     }
 
     public void charger(String nomFichier){
-        List<Batiment> resultats = jsonPersistanceService.charger(nomFichier);
+        List<Batiment> resultats = JsonPersistanceService.getInstance().charger(nomFichier);
         if (resultats != null){
             this.listeBatiments.clear();
             this.listeBatiments.addAll(resultats);

@@ -32,7 +32,6 @@ public class JsonPersistanceService {
     private static JsonPersistanceService instance = null;
 
     private JsonPersistanceService() {
-        // TODO : Faire un ObservableList ici et ajouter des listeners qui vont maj le combobox chargements de fichiers.
         this.fichiersSauvegarde = FXCollections.observableArrayList(getFichiersDisque());
         this.gson = new GsonBuilder()
                 .registerTypeAdapterFactory(adapter)

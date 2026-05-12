@@ -5,5 +5,16 @@
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="org.example.smartenergymanager.controller.ListController">
-    <Label text="Onglet Liste — en construction"/>
+    <?import javafx.scene.control.TableView?>
+    <?import javafx.scene.control.TableColumn?>
+
+    <TableView fx:id="tableBatiments"
+               VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colTypeBatiment" text="Type" prefWidth="300"/>
+            <TableColumn fx:id="colNom" text="Nom" maxWidth="Infinity"/>
+            <TableColumn fx:id="colSurface" text="Surface" prefWidth="100"/>
+            <TableColumn fx:id="colNbReleves" text="Nb de Relevés" prefWidth="200"/>
+        </columns>
+    </TableView>
 </StackPane>
