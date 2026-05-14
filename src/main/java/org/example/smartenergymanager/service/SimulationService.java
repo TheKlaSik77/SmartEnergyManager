@@ -33,4 +33,8 @@ public class SimulationService {
             this.dateActuelle = dateActuelle.plusDays(1);
         }
     }
+
+    public LocalDate getDateActuelle() {
+        return this.dateActuelle;
+    }
 }

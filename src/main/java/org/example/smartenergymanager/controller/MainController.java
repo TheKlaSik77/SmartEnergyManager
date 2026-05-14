@@ -10,9 +10,8 @@ import javafx.scene.control.Label;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.example.smartenergymanager.model.batiment.Batiment;
-import org.example.smartenergymanager.model.batiment.TypeBatiment;
-import org.example.smartenergymanager.model.utils.Coordonnees;
 import org.example.smartenergymanager.service.BatimentService;
+import org.example.smartenergymanager.service.SimulationService;
 
 import java.io.IOException;
 
@@ -23,7 +22,8 @@ public class MainController {
     @FXML private Button btnGenererMois;
 
     @FXML private CarteController carteController;
-    @FXML private ListController listController;
+    @FXML private ListeController listeController;
+    @FXML private DashboardController dashboardController;
 
     @FXML
     public void initialize() {
@@ -36,11 +36,17 @@ public class MainController {
     }
 
     public void onJourSuivant(ActionEvent actionEvent) {
-        System.out.println("Jour généré");
+        SimulationService.getInstance().avancerUnJour();
+        listeController.rafraichir();
+        dashboardController.rafraichir();
+        labelDate.setText(SimulationService.getInstance().getDateActuelle().toString());
     }
 
     public void onGenererMois(ActionEvent actionEvent) {
-        System.out.println("Mois généré");
+        SimulationService.getInstance().avancerUnMois();
+        listeController.rafraichir();
+        dashboardController.rafraichir();
+        labelDate.setText(SimulationService.getInstance().getDateActuelle().toString());
     }
 
     public void rafraichir(){

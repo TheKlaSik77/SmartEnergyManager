@@ -24,7 +24,7 @@
 
     <HBox spacing="10" alignment="CENTER_RIGHT">
         <Button text="Annuler" onAction="#onAnnuler"/>
-        <Button text="Créer" onAction="#onCreer"/>
+        <Button text="Valider" onAction="#onCreer"/>
     </HBox>
 
 </VBox>

@@ -17,6 +17,8 @@ public class AjoutBatimentFormulaireController {
     @FXML TextField surfaceField;
     private Batiment batiment;
 
+    private Batiment batimentAModifier = null;
+
     @FXML
     public void initialize(){
         this.batiment = null;
@@ -33,7 +35,13 @@ public class AjoutBatimentFormulaireController {
             case BATIMENT_UNIVERSITAIRE -> this.title.setText("Nouveau Bâtiment Universitaire");
             case LOCAL_COMMERCIAL -> this.title.setText("Nouveau Local Commercial");
         }
+    }
 
+    public void setBatimentAModifier(Batiment batiment) {
+        this.batimentAModifier = batiment;
+        this.nomField.setText(batiment.getNom());
+        this.surfaceField.setText(String.valueOf(batiment.getSurface()));
+        this.title.setText("Modifier " + batiment.getNom());
     }
 
     public void setCoordonneesBatiment(Coordonnees coordonneesBatiment){
@@ -41,11 +49,21 @@ public class AjoutBatimentFormulaireController {
     }
 
     @FXML
-    public void onCreer(){
+    public void onCreer() {
         String nom = nomField.getText();
         int surface = Integer.parseInt(surfaceField.getText());
 
-        this.batiment = BatimentService.getInstance().creerBatiment(this.typeBatiment,nom, surface, coordonneesBatiment);
+        if (batimentAModifier != null) {
+            Batiment nouveauBatiment = BatimentService.getInstance().creerBatiment(
+                    batimentAModifier.getTypeBatiment(), nom, surface, batimentAModifier.getCoordonnees()
+            );
+            BatimentService.getInstance().modifierBatiment(batimentAModifier, nouveauBatiment);
+            this.batiment = nouveauBatiment;
+        } else {
+            this.batiment = BatimentService.getInstance().creerBatiment(
+                    this.typeBatiment, nom, surface, coordonneesBatiment
+            );
+        }
         ((Stage) nomField.getScene().getWindow()).close();
     }
 

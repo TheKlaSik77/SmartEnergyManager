@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+
+<VBox prefHeight="600.0" prefWidth="1200.0"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.smartenergymanager.controller.GraphiqueController"
+      spacing="10"
+      style="-fx-padding: 10;">
+
+    <HBox maxWidth="Infinity" spacing="10" alignment="CENTER_LEFT">
+        <Button onAction="#fermer" text="Fermer" style="-fx-padding: 5 10 5 10;"/>
+        <Label fx:id="nomBatiment" alignment="CENTER" HBox.hgrow="ALWAYS" maxWidth="Infinity"
+               style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+        <ChoiceBox fx:id="choixPeriode"/>
+        <ChoiceBox fx:id="choixEnergie"/>
+    </HBox>
+
+    <VBox fx:id="zoneGraphiques" VBox.vgrow="ALWAYS" spacing="10"/>
+
+</VBox>

@@ -16,7 +16,7 @@
             <Button fx:id="btnJourSuivant" text="Jour suivant" onAction="#onJourSuivant"/>
             <Button fx:id="btnGenererMois" text="Générer mois" onAction="#onGenererMois"/>
             <fx:include source="charger-fichier.fxml"/>
-            <Button fx:id="Sauvegarder" text="Sauvegarder" onAction="#ouvrirSauvegardeFormulaire"/>
+            <Button fx:id="sauvegarder" text="Sauvegarder" onAction="#ouvrirSauvegardeFormulaire"/>
         </HBox>
 
 
@@ -24,7 +24,7 @@
 
     <!-- ONGLETS -->
     <center>
-        <TabPane tabClosingPolicy="UNAVAILABLE">
+        <TabPane tabClosingPolicy="UNAVAILABLE" style="-fx-tab-min-width: 385px; -fx-alignment: center;">
             <Tab text="Carte">
                 <fx:include source="carte/carte-view.fxml" fx:id="carte"/>
             </Tab>
@@ -34,7 +34,6 @@
             <Tab text="Dashboard">
                 <fx:include source="dashboard-view.fxml" fx:id="dashboard"/>
             </Tab>
-            <Tab text="..."/>
         </TabPane>
     </center>
 
