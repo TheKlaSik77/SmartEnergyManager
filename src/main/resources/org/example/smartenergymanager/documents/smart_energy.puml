@@ -1,150 +1,289 @@
 @startuml Smart_Energy_Manager
 
 skinparam classAttributeIconSize 0
-skinparam classFontSize 13
+skinparam classFontSize 12
 skinparam classHeaderBackgroundColor #dae8fc
 skinparam classBorderColor #6c8ebf
 skinparam ArrowColor #333333
-skinparam linetype ortho
+skinparam linetype polyline
+skinparam packageBackgroundColor #f5f5f5
+skinparam packageBorderColor #999999
+left to right direction
 
 ' ══════════════════════
 ' MODEL
 ' ══════════════════════
 
-class Coordonnees {
-  - x : int
-  - y : int
-  --
-  + getX() : int
-  + getY() : int
-}
+package "model" #eff6ff {
 
-abstract class Batiment {
-  - id : int
-  - nom : String
-  - surface : int
-  - coordonnees : Coordonnees
-  - releves : List<Releve>
-  --
-  + getId() : int
-  + getNom() : String
-  + getSurface() : int
-  + getCoordonnees() : Coordonnees
-  + getListeReleves() : List<Releve>
-  + ajouterReleve(r : Releve) : void
-  # calculerReleve(date : LocalDate, type : TypeEnergie, coefMin : double, coefMax : double) : Releve
-  + genererReleves(date : LocalDate) : void
-  # {abstract} genererElectricite(date : LocalDate) : Releve
-  # {abstract} genererEau(date : LocalDate) : Releve
-  # {abstract} genererGaz(date : LocalDate) : Releve
-  # {abstract} genererChauffage(date : LocalDate) : Releve
-  # {abstract} genererClimatisation(date : LocalDate) : Releve
-}
+  package "model.utils" #dbeafe {
 
-Batiment *-- Coordonnees : possède
+    enum TypeEnergie {
+      ELECTRICITE
+      EAU
+      GAZ
+      CHAUFFAGE
+      CLIMATISATION
+      --
+      - unite : String
+      - prixUnitaire : double
+      --
+      + getUnite() : String
+      + getPrixUnitaire() : double
+    }
 
-class Maison {
-}
+    enum Saison {
+      HIVER
+      PRINTEMPS
+      ETE
+      AUTOMNE
+    }
 
-class Appartement {
-}
+    class Coordonnees {
+      - x : double
+      - y : double
+      --
+      + getX() : double
+      + getY() : double
+      + estPlusProche(c1 : Coordonnees, c2 : Coordonnees) : boolean
+      + estSurBatiment(b : Batiment, taille : int) : boolean
+    }
 
-class Bureau {
-}
+  }
 
-class LocalCommercial {
-}
+  class Releve {
+    - date : LocalDate
+    - typeEnergie : TypeEnergie
+    - quantite : double
+    - cout : double
+    --
+    + getDate() : LocalDate
+    + getTypeEnergie() : TypeEnergie
+    + getQuantite() : double
+    + getCout() : double
+  }
 
-class BatimentUniversitaire {
-}
+  package "model.batiment" #dbeafe {
 
-class Releve {
-  - date : LocalDate
-  - typeEnergie : TypeEnergie
-  - quantite : double
-  - cout : double
-  --
-  + getDate() : LocalDate
-  + getTypeEnergie() : TypeEnergie
-  + getQuantite() : double
-  + getCout() : double
-}
+    enum TypeBatiment {
+      MAISON
+      APPARTEMENT
+      BUREAU
+      BATIMENT_UNIVERSITAIRE
+      LOCAL_COMMERCIAL
+    }
 
-enum TypeEnergie {
-  ELECTRICITE
-  EAU
-  GAZ
-  CHAUFFAGE
-  CLIMATISATION
-  --
-  - unite : String
-  - prixUnitaire : double
-  + getUnite() : String
-  + getPrixUnitaire() : double
+    abstract class Batiment {
+      - id : int
+      - nom : String
+      - surface : int
+      - coordonnees : Coordonnees
+      - listeReleves : List<Releve>
+      --
+      + getId() : int
+      + getNom() : String
+      + getSurface() : int
+      + getCoordonnees() : Coordonnees
+      + getListeReleves() : List<Releve>
+      + {abstract} getTypeBatiment() : TypeBatiment
+      + ajouterReleve(r : Releve) : void
+      # calculerReleve(date : LocalDate, type : TypeEnergie, coefMin : double, coefMax : double) : Releve
+      + genererReleves(date : LocalDate) : void
+      # {abstract} genererElectricite(date : LocalDate) : Releve
+      # {abstract} genererEau(date : LocalDate) : Releve
+      # {abstract} genererGaz(date : LocalDate) : Releve
+      # {abstract} genererChauffage(date : LocalDate) : Releve
+      # {abstract} genererClimatisation(date : LocalDate) : Releve
+    }
+
+    class Maison {
+      + getTypeBatiment() : TypeBatiment
+    }
+
+    class Appartement {
+      + getTypeBatiment() : TypeBatiment
+    }
+
+    class Bureau {
+      + getTypeBatiment() : TypeBatiment
+    }
+
+    class LocalCommercial {
+      + getTypeBatiment() : TypeBatiment
+    }
+
+    class BatimentUniversitaire {
+      + getTypeBatiment() : TypeBatiment
+    }
+
+  }
 
 }
 
 ' ══════════════════════
-' SERVICES
+' SERVICE
 ' ══════════════════════
 
-class BatimentService {
-  - batiments : List<Batiment>
-  --
-  + ajouterBatiment(b : Batiment) : void
-  + supprimerBatiment(b : Batiment) : void
-  + modifierBatiment(b : Batiment) : void
-  + getTousBatiments() : List<Batiment>
-  + genererReleveUnJour(date : LocalDate) : void
-  + sauvegarder() : void
-  + charger() : List<Batiment>
+package "service" #f0fdf4 {
+
+  class BatimentService <<Singleton>> {
+    - listeBatiments : ObservableList<Batiment>
+    --
+    + {static} getInstance() : BatimentService
+    + getBatiments() : ObservableList<Batiment>
+    + creerBatiment(type : TypeBatiment, nom : String, surface : int, coords : Coordonnees) : Batiment
+    + ajouterBatiment(b : Batiment) : void
+    + supprimerBatiment(b : Batiment) : void
+    + modifierBatiment(ancien : Batiment, nouveau : Batiment) : void
+    + genererReleveUnJour(date : LocalDate) : void
+    + clearBatiments() : void
+    + charger(nomFichier : String) : void
+    + getBatimentLePlusProche(clic : Coordonnees, taille : int) : Batiment
+  }
+
+  class SimulationService <<Singleton>> {
+    - dateActuelle : LocalDate
+    --
+    + {static} getInstance() : SimulationService
+    + avancerUnJour() : void
+    + avancerUnMois() : void
+    + getDateActuelle() : LocalDate
+  }
+
+  class CalendrierService {
+    --
+    + {static} estWeekend(date : LocalDate) : boolean
+    + {static} estVacancesScolaires(date : LocalDate) : boolean
+    + {static} getSaison(date : LocalDate) : Saison
+  }
+
+  class JsonPersistanceService <<Singleton>> {
+    - {static} DOSSIER : String
+    - fichiersSauvegarde : ObservableList<String>
+    --
+    + {static} getInstance() : JsonPersistanceService
+    + getFichiersSauvegarde() : ObservableList<String>
+    + getFichiersDisque() : List<String>
+    + sauvegarder(nomFichier : String) : void
+    + charger(nomFichier : String) : ObservableList<Batiment>
+  }
+
+  class DashboardService {
+    --
+    + {static} getNbBatiments() : int
+    + {static} getNbBatimentParTypeBatiment(type : TypeBatiment) : int
+    + {static} getNbReleves() : int
+    + {static} getNbRelevesParTypeEnergie(type : TypeEnergie) : int
+    + {static} getCoutParJour(b : Batiment, nbJours : int) : Map
+    + {static} getCoutParJourParTypeEnergie(b : Batiment, nbJours : int, type : TypeEnergie) : Map
+    + {static} getQuantiteParJourParTypeEnergie(b : Batiment, nbJours : int, type : TypeEnergie) : Map
+    + {static} getCoutParMois(b : Batiment, nbMois : int) : Map
+    + {static} getCoutParMoisParTypeEnergie(b : Batiment, nbMois : int, type : TypeEnergie) : Map
+    + {static} getQuantiteParMoisParTypeEnergie(b : Batiment, nbMois : int, type : TypeEnergie) : Map
+    + {static} getCoutParAnnee(b : Batiment) : Map
+    + {static} getCoutParAnneeParTypeEnergie(b : Batiment, type : TypeEnergie) : Map
+    + {static} getQuantiteParAnneeParTypeEnergie(b : Batiment, type : TypeEnergie) : Map
+  }
+
 }
-
-class StatistiquesService {
-  - batimentService : BatimentService
-  --
-  + consommationTotaleJour(date : LocalDate) : double
-  + consommationTotaleMois(mois : int, annee : int) : double
-  + coutTotalMois(mois : int, annee : int) : double
-  + batimentPlusConsommateur() : Batiment
-  + energieDominante() : TypeEnergie
-  + detecterAnomalie(b : Batiment) : boolean
-}
-
-class Simulation {
-  - dateSimulation : LocalDate
-  - batimentService : BatimentService
-  --
-  + getDateSimulation() : LocalDate
-  + avancerJour() : void
-  + avancerUnMois() : void
-}
-
-class JsonPersistanceService {
-  - cheminFichier : String
-  --
-  + sauvegarder(batiments : List<Batiment>) : void
-  + charger() : List<Batiment>
-}
-
-class CalendrierService {
-  --
-  + {static} estWeekend(date : LocalDate) : boolean
-  + {static} estVacancesScolaires(date : LocalDate) : boolean
-  + {static} getSaison(date : LocalDate) : Saison
-}
-
-enum Saison {
-  HIVER
-  PRINTEMPS
-  ETE
-  AUTOMNE
-}
-
-
 
 ' ══════════════════════
-' RELATIONS
+' CONTROLLER
+' ══════════════════════
+
+package "controller" #fefce8 {
+
+  class MainController {
+    --
+    + initialize() : void
+    + onJourSuivant(e : ActionEvent) : void
+    + onGenererMois(e : ActionEvent) : void
+    + rafraichir() : void
+    - ouvrirSauvegardeFormulaire() : void
+  }
+
+  class CarteController {
+    - icones : Map<Batiment, ImageView>
+    - {static} TAILLE_ICONE : int
+    --
+    + initialize() : void
+    + poserBatiment(event : MouseEvent) : void
+    - poserIconeBatiment(b : Batiment) : void
+    - retirerIconeBatiment(b : Batiment) : void
+    + rafraichirCarte() : void
+    - getTypeBatimentActif(actif : Toggle) : TypeBatiment
+    - ouvrirFormulaireAjout(type : TypeBatiment, clic : Coordonnees) : Batiment
+  }
+
+  class BarreOutilsController {
+    --
+    + initialize() : void
+    + getGroupeBoutonsBarreOutils() : ToggleGroup
+    + getGommeBtn() : ToggleButton
+    + getMaisonBtn() : ToggleButton
+    + getAppartementBtn() : ToggleButton
+    + getBureauBtn() : ToggleButton
+    + getBatimentUniversitaireBtn() : ToggleButton
+    + getLocalCommercialBtn() : ToggleButton
+  }
+
+  class ListeController {
+    --
+    + initialize() : void
+    + rafraichir() : void
+    + onBatimentSelectionne(b : Batiment) : void
+    - ouvrirFormulaireModification(b : Batiment) : void
+  }
+
+  class DashboardController {
+    --
+    + initialize() : void
+    + rafraichir() : void
+  }
+
+  class GraphiqueController {
+    - batiment : Batiment
+    --
+    + initialize() : void
+    + setBatiment(b : Batiment) : void
+    + rafraichir() : void
+    - creerGraphiquePrix(periode : String, type : TypeEnergie) : LineChart
+    - creerGraphiqueQuantite(periode : String, type : TypeEnergie) : LineChart
+    + fermer() : void
+  }
+
+  class AjoutBatimentFormulaireController {
+    - coordonneesBatiment : Coordonnees
+    - typeBatiment : TypeBatiment
+    - batiment : Batiment
+    - batimentAModifier : Batiment
+    --
+    + initialize() : void
+    + setType(type : TypeBatiment) : void
+    + setBatimentAModifier(b : Batiment) : void
+    + setCoordonneesBatiment(c : Coordonnees) : void
+    + onCreer() : void
+    + onAnnuler() : void
+    + getBatimentCree() : Batiment
+  }
+
+  class ChargerFichierController {
+    --
+    + initialize() : void
+    + charger() : void
+  }
+
+  class SauvegarderFichierFormulaireController {
+    --
+    + initialize() : void
+    + onAnnuler() : void
+    + onSauvegardeSurFichier() : void
+  }
+
+}
+
+' ══════════════════════
+' RELATIONS - MODEL
 ' ══════════════════════
 
 Batiment <|-- Maison
@@ -153,18 +292,53 @@ Batiment <|-- Bureau
 Batiment <|-- LocalCommercial
 Batiment <|-- BatimentUniversitaire
 
+Batiment *-- Coordonnees : possède
 Batiment "1" *-- "0..*" Releve : contient
+Batiment --> TypeBatiment : est de type
 
 Releve --> TypeEnergie : utilise
+CalendrierService ..> Saison : retourne
+
+' ══════════════════════
+' RELATIONS - SERVICE
+' ══════════════════════
 
 BatimentService "1" o-- "0..*" Batiment : gère
 BatimentService ..> JsonPersistanceService : utilise
-
-StatistiquesService ..> BatimentService : dépend de
-Simulation ..> BatimentService : dépend de
-
+SimulationService ..> BatimentService : utilise
 CalendrierService ..> Saison : utilise
 Batiment ..> CalendrierService : utilise
+DashboardService ..> BatimentService : consulte
+JsonPersistanceService ..> Batiment : sérialise
 
+' ══════════════════════
+' RELATIONS - CONTROLLER
+' ══════════════════════
+
+MainController --> CarteController : coordonne
+MainController --> ListeController : coordonne
+MainController --> DashboardController : coordonne
+MainController ..> SimulationService : utilise
+MainController ..> BatimentService : écoute
+
+CarteController --> BarreOutilsController : utilise
+CarteController ..> BatimentService : utilise
+CarteController ..> AjoutBatimentFormulaireController : ouvre
+
+ListeController ..> BatimentService : utilise
+ListeController ..> GraphiqueController : ouvre
+ListeController ..> AjoutBatimentFormulaireController : ouvre
+
+DashboardController ..> DashboardService : utilise
+DashboardController ..> BatimentService : écoute
+
+GraphiqueController ..> DashboardService : utilise
+
+ChargerFichierController ..> BatimentService : utilise
+ChargerFichierController ..> JsonPersistanceService : utilise
+
+SauvegarderFichierFormulaireController ..> JsonPersistanceService : utilise
+
+AjoutBatimentFormulaireController ..> BatimentService : utilise
 
 @enduml
