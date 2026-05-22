@@ -1,0 +1,55 @@
+@startuml Use_Case_Smart_Energy_Manager
+
+skinparam actorStyle awesome
+skinparam usecaseBackgroundColor #dae8fc
+skinparam usecaseBorderColor #6c8ebf
+skinparam ArrowColor #333333
+skinparam packageBackgroundColor #f5f5f5
+skinparam packageBorderColor #999999
+
+actor "Utilisateur" as U
+
+rectangle "Smart Energy Manager" {
+
+  package "Gestion des bâtiments" {
+    usecase "Ajouter un bâtiment" as UC1
+    usecase "Modifier un bâtiment" as UC2
+    usecase "Supprimer un bâtiment" as UC3
+  }
+
+  package "Simulation" {
+    usecase "Avancer d'un jour" as UC4
+    usecase "Générer un mois" as UC5
+  }
+
+  package "Consultation" {
+    usecase "Visualiser la carte" as UC6
+    usecase "Consulter la liste" as UC7
+    usecase "Consulter le dashboard" as UC8
+    usecase "Voir les graphiques\nd'un bâtiment" as UC9
+  }
+
+  package "Persistance" {
+    usecase "Charger une sauvegarde" as UC10
+    usecase "Sauvegarder" as UC11
+  }
+
+}
+
+U --> UC1
+U --> UC2
+U --> UC3
+U --> UC4
+U --> UC5
+U --> UC6
+U --> UC7
+U --> UC8
+U --> UC9
+U --> UC10
+U --> UC11
+
+UC4 .> UC8 : <<include>>
+UC5 .> UC8 : <<include>>
+UC9 .> UC7 : <<extend>>
+
+@enduml

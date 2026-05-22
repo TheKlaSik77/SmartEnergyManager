@@ -48,9 +48,10 @@ public class DashboardService {
 
     public static Map<LocalDate, Double> getCoutParJour(Batiment batiment, int nbJours) {
         Map<LocalDate, Double> map = new TreeMap<>();
+        LocalDate dateRef = SimulationService.getInstance().getDateActuelle();
         for (Releve releve : batiment.getListeReleves()) {
             LocalDate date = releve.getDate();
-            if (date.isAfter(LocalDate.now().minusDays(nbJours))) {
+            if (date.isAfter(dateRef.minusDays(nbJours))) {
                 map.merge(date, releve.getCout(), Double::sum);
             }
         }
@@ -60,7 +61,7 @@ public class DashboardService {
     public static Map<LocalDate, Double> getCoutParJourParTypeEnergie(Batiment batiment, int nbJours, TypeEnergie typeEnergie) {
         Map<LocalDate, Double> map = new TreeMap<>();
         for (Releve releve : batiment.getListeReleves()) {
-            if (releve.getTypeEnergie() == typeEnergie && releve.getDate().isAfter(LocalDate.now().minusDays(nbJours))) {
+            if (releve.getTypeEnergie() == typeEnergie && releve.getDate().isAfter(SimulationService.getInstance().getDateActuelle().minusDays(nbJours))) {
                 map.merge(releve.getDate(), releve.getCout(), Double::sum);
             }
         }
@@ -70,7 +71,7 @@ public class DashboardService {
     public static Map<LocalDate, Double> getQuantiteParJourParTypeEnergie(Batiment batiment, int nbJours, TypeEnergie typeEnergie) {
         Map<LocalDate, Double> map = new TreeMap<>();
         for (Releve releve : batiment.getListeReleves()) {
-            if (releve.getTypeEnergie() == typeEnergie && releve.getDate().isAfter(LocalDate.now().minusDays(nbJours))) {
+            if (releve.getTypeEnergie() == typeEnergie && releve.getDate().isAfter(SimulationService.getInstance().getDateActuelle().minusDays(nbJours))) {
                 map.merge(releve.getDate(), releve.getQuantite(), Double::sum);
             }
         }
